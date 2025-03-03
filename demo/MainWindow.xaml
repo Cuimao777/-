@@ -1,0 +1,94 @@
+﻿<Window x:Class="DesktopOrganizer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="翠猫文件转移器" Height="450" Width="800" AllowsTransparency="True" WindowStyle="None" Background="Transparent" ResizeMode="CanResizeWithGrip">
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="0" ResizeBorderThickness="5"/>
+    </WindowChrome.WindowChrome>
+    <Grid>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- 标题栏 -->
+            <Grid Background="#202020" MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="120"/>
+                </Grid.ColumnDefinitions>
+                
+                <TextBlock Text="翠猫文件转移器 V2.0" 
+                           VerticalAlignment="Center" 
+                           Margin="15,0" 
+                           Foreground="White" 
+                           FontWeight="SemiBold"
+                           FontSize="14"/>
+                
+                <!-- 透明度滑块 -->
+                <Slider x:Name="OpacitySlider" 
+                        Grid.Column="2"
+                        Minimum="0.1" 
+                        Maximum="1" 
+                        Value="1" 
+                        Margin="10,0" 
+                        Height="20"
+                        ValueChanged="Slider_ValueChanged"
+                        IsMoveToPointEnabled="True"
+                        ToolTip="调节窗口透明度"
+                        VerticalAlignment="Center"/>
+            </Grid>
+
+            <!-- 拖放区域列表 -->
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <ItemsControl ItemsSource="{Binding DropZones}" Margin="15,15,5,15">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Width="200" Height="140" Margin="8"
+                                    Background="#F5F5F5"
+                                    BorderBrush="#E0E0E0"
+                                    BorderThickness="1"
+                                    CornerRadius="8"
+                                    Tag="{Binding Path}"
+                                    AllowDrop="True"
+                                    Drop="DropZone_Drop"
+                                    DragEnter="DropZone_DragEnter"
+                                    MouseRightButtonDown="DropZone_MouseRightButtonDown">
+                                <Border.Effect>
+                                    <DropShadowEffect BlurRadius="8" ShadowDepth="2" Opacity="0.15"/>
+                                </Border.Effect>
+                                <Border.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="修改名称" Click="EditName_Click" Tag="{Binding}"/>
+                                        <MenuItem Header="设置路径" Click="CustomizePath_Click" Tag="{Binding}"/>
+                                    </ContextMenu>
+                                </Border.ContextMenu>
+                                <Grid>
+                                    <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" 
+                                             FontSize="16" 
+                                             FontWeight="Medium"
+                                             HorizontalAlignment="Center" 
+                                             VerticalAlignment="Center"
+                                             Background="Transparent"
+                                             BorderThickness="0"
+                                             TextAlignment="Center"
+                                             Foreground="#333333"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+</Window>
